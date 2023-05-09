@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Coordinates } from "../../components/PubSearch";
+import type { Coordinates } from "../../location";
 
 export interface LocationState {
     isLoading: boolean,
