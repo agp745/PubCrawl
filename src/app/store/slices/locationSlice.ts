@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { Coordinates } from "../../location";
 import type { CityCoordinates } from "../../../components/PubSearch";
@@ -17,6 +17,10 @@ const initialState: LocationState = {
     },
     city: undefined,
 }
+
+export const fetchPubs = createAsyncThunk('location/fetchPubs', async() => {
+    
+})
 
 const locationSlice = createSlice({
     name: 'location',

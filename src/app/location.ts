@@ -13,6 +13,7 @@ export type LocationInfo = {
     city: string,
     state: string,
     country: string,
+    website_url: string | undefined
 }
   
 export const getCoordinates = (dispatch: AppDispatch) => {

@@ -23,7 +23,7 @@ function Header() {
 
 function Footer() {
     return (
-        <section className="flex justify-center">
+        <section className="fixed bottom-0 w-full text-center">
             <p>©copyright 2023</p>
         </section>
     )

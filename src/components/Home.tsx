@@ -4,13 +4,15 @@ import Loading from "./Loading"
 export default function Home() {
     
     return (
-        <section className="flex justify-center content-center gap-10 h-96">
-            <div className="flex flex-col">
-                <Link to={'/pubs'}>Find a Brewery</Link>
-                <Link to={'/drinks'}>Look up Drinks</Link>
-            </div>
+        <section className="flex flex-col justify-center items-center content-center gap-10 h-96">
             <div>
-                hello, this is where the logo will be
+                <h1 className="uppercase text-8xl font-bold mt-72 text-neutral-900">Pub Crawl</h1>
+                <div>logo here</div>
+            </div>
+            <div className="flex flex-col items-center mt-20">
+                <Link to={'/pubs'} className="text-4xl">Find a Brewery</Link>
+                <div className="text-4xl">•</div>
+                <Link to={'/drinks'} className="text-4xl">Look up Drinks</Link>
             </div>
             <Loading />
         </section>
