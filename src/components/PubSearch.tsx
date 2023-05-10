@@ -12,10 +12,13 @@ export type CityCoordinates = {
     city: string
 }
 
-function SearchBar() {
+type SearchBarProps = {
+    onCityCoordinates: (coords: CityCoordinates) => void
+}
+
+function SearchBar({ onCityCoordinates }:SearchBarProps) {
 
     const dispatch = useDispatch()
-
     const [search, setSearch] = useState({
         city: '',
         state: '',
@@ -29,7 +32,6 @@ function SearchBar() {
             }
         })
         if (data.length > 0) {
-            console.log(data[0])
             const city: CityCoordinates = {
                 coordinates : {
                     latitude: data[0].latitude,
@@ -38,7 +40,7 @@ function SearchBar() {
                 city: data[0].name
             }
             dispatch(setCity(city))
-            // getCoordinates(dispatch)
+            onCityCoordinates(city)
         } else {
             console.log('err: city not found')
         }
@@ -62,6 +64,9 @@ function SearchBar() {
     )
 }
 
+
+
+
 export default function PubSearch() {
 
     const { currentCoords, isLoading, city } = useSelector((state: RootState) => state.location)
@@ -75,11 +80,16 @@ export default function PubSearch() {
         if(!isLoading) {
             fetchPubs(currentCoords.latitude, currentCoords.longitude, page)
         }
-    }, [currentCoords, page])
+    }, [dispatch, currentCoords, page])
 
     const fetchPubs = async (latitude: number, longitude: number, page: number) => {
         const { data } = await axios(`https://api.openbrewerydb.org/v1/breweries/?by_dist=${latitude},${longitude}&page=${page}&per_page=6`)
         setBreweries(data)
+    }
+
+    const handleCityCoordinates = (coords: CityCoordinates): void => {
+        setPage(1)
+        fetchPubs(coords.coordinates.latitude, coords.coordinates.longitude, page)    
     }
 
     const nearbyBreweries = breweries.map((pub: LocationInfo) => {
@@ -104,7 +114,7 @@ export default function PubSearch() {
             (<h2 className="text-2xl">Breweries in you area</h2>):
             (<h2 className="text-2xl">Breweries near {city}</h2>)}
             
-            <SearchBar />
+            <SearchBar onCityCoordinates={handleCityCoordinates}/>
             <section className="flex justify-center gap-10">
                 <div className="flex flex-col mr-4">
                     {isLoading ? <div>Loading...</div> : <div className="flex flex-col gap-5">{nearbyBreweries}</div>}

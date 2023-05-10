@@ -15,17 +15,11 @@ export default function Map() {
     const center = useMemo(() => ({
         lat: currentCoords.latitude,
         lng: currentCoords.longitude
-    }), [])
-    
-    // const center: GoogleMapCenter = {
-    //     lat: currentCoords.latitude,
-    //     lng: currentCoords.longitude,
-    // } 
+    }), [currentCoords])
 
     const style: React.CSSProperties = {
         width: '400px',
         height: '400px'
-
     }
 
     const { isLoaded, loadError ,url } = useLoadScript({

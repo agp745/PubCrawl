@@ -33,6 +33,7 @@ const locationSlice = createSlice({
             state.isLoading = true
             state.currentCoords = action.payload.coordinates
             state.city = action.payload.city
+            state.isLoading = false
         }
     }
 })
