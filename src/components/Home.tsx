@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import Loading from "./Loading"
 
 export default function Home() {
     
@@ -11,6 +12,7 @@ export default function Home() {
             <div>
                 hello, this is where the logo will be
             </div>
+            <Loading />
         </section>
     )
 }

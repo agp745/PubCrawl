@@ -1,25 +1,70 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getCoordinates } from "../app/location"
+import { Coordinates, getCoordinates } from "../app/location"
+import { setCity } from "../app/store/slices/locationSlice"
 import type { LocationInfo } from "../app/location"
 import type { RootState } from "../app/store/store"
 import axios from "axios"
 import Map from "./Map"
 
+export type CityCoordinates = {
+    coordinates: Coordinates,
+    city: string
+}
 
 function SearchBar() {
 
+    const dispatch = useDispatch()
+
+    const [search, setSearch] = useState({
+        city: '',
+        state: '',
+        country: '',
+    })
+
+    const fetchCityCoords = async () => {
+        const { data } = await axios(`https://api.api-ninjas.com/v1/geocoding?city=${search.city}`, {
+            headers: {
+                'X-Api-Key': import.meta.env.VITE_GEOCODE_API_KEY
+            }
+        })
+        if (data.length > 0) {
+            console.log(data[0])
+            const city: CityCoordinates = {
+                coordinates : {
+                    latitude: data[0].latitude,
+                    longitude: data[0].longitude,
+                },
+                city: data[0].name
+            }
+            dispatch(setCity(city))
+            // getCoordinates(dispatch)
+        } else {
+            console.log('err: city not found')
+        }
+    }
+
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setSearch({
+            ...search,
+            [name]: value
+        })
+    }
+
     return (
         <>
-            <input type="text" placeholder="city"/>
-            <button>Search</button>
+            <input type="text" placeholder="city" name="city" value={search.city} onChange={handleInput}/>
+            <input type="text" placeholder="state (optional)" name="state" value={search.state} onChange={handleInput}/>
+            {/* <input type="text" placeholder="country (optional)" name="country" value={search.country} onChange={handleInput}/> */}
+            <button onClick={fetchCityCoords}>Search</button>
         </>
     )
 }
 
 export default function PubSearch() {
 
-    const { currentCoords, isLoading } = useSelector((state: RootState) => state.location)
+    const { currentCoords, isLoading, city } = useSelector((state: RootState) => state.location)
     const dispatch = useDispatch()
 
     const [breweries, setBreweries] = useState([])
@@ -30,10 +75,10 @@ export default function PubSearch() {
         if(!isLoading) {
             fetchPubs(currentCoords.latitude, currentCoords.longitude, page)
         }
-    }, [dispatch, currentCoords, page])
+    }, [currentCoords, page])
 
     const fetchPubs = async (latitude: number, longitude: number, page: number) => {
-        const { data } = await axios.get(`https://api.openbrewerydb.org/v1/breweries/?by_dist=${latitude},${longitude}&page=${page}&per_page=6`)
+        const { data } = await axios(`https://api.openbrewerydb.org/v1/breweries/?by_dist=${latitude},${longitude}&page=${page}&per_page=6`)
         setBreweries(data)
     }
 
@@ -55,7 +100,10 @@ export default function PubSearch() {
 
     return (
         <section className="flex flex-col">
-            <h2 className="text-2xl">Breweries in you area</h2>
+            {city === undefined ? 
+            (<h2 className="text-2xl">Breweries in you area</h2>):
+            (<h2 className="text-2xl">Breweries near {city}</h2>)}
+            
             <SearchBar />
             <section className="flex justify-center gap-10">
                 <div className="flex flex-col mr-4">
@@ -66,7 +114,7 @@ export default function PubSearch() {
                         <button onClick={() => setPage(page + 1)}>{'>'}</button>
                     </div>
                 </div>
-                <Map />
+            <Map />
             </section>
         </section>
     )

@@ -12,15 +12,15 @@ export default function Map() {
 
     const { currentCoords } = useSelector((state: RootState) => state.location)
 
-    // const center = useMemo(() => ({
-    //     lat: currentCoords.latitude,
-    //     lng: currentCoords.longitude
-    // }), [])
-    
-    const center: GoogleMapCenter = {
+    const center = useMemo(() => ({
         lat: currentCoords.latitude,
-        lng: currentCoords.longitude,
-    } 
+        lng: currentCoords.longitude
+    }), [])
+    
+    // const center: GoogleMapCenter = {
+    //     lat: currentCoords.latitude,
+    //     lng: currentCoords.longitude,
+    // } 
 
     const style: React.CSSProperties = {
         width: '400px',

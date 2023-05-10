@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { Coordinates } from "../../location";
+import type { CityCoordinates } from "../../../components/PubSearch";
 
 export interface LocationState {
     isLoading: boolean,
-    currentCoords: Coordinates
+    currentCoords: Coordinates,
+    city: string | undefined,
 }
 
 const initialState: LocationState = {
@@ -12,7 +14,8 @@ const initialState: LocationState = {
     currentCoords: {
         latitude: 0,
         longitude: 0
-    }
+    },
+    city: undefined,
 }
 
 const locationSlice = createSlice({
@@ -25,10 +28,15 @@ const locationSlice = createSlice({
         },
         errCoords: (state) => {
             state.isLoading = false
+        },
+        setCity: (state, action: PayloadAction<CityCoordinates>) => {
+            state.isLoading = true
+            state.currentCoords = action.payload.coordinates
+            state.city = action.payload.city
         }
     }
 })
 
-export const { setCoords, errCoords } = locationSlice.actions
+export const { setCoords, errCoords, setCity } = locationSlice.actions
 
 export default locationSlice.reducer
