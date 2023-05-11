@@ -121,6 +121,7 @@ function DrinkInfo({onSelectedToggle, drinkInfo}: DrinkModuleProps) {
 export default function Drinks() {
 
     const [isSelected, setIsSelected] = useState(false)
+    const [page, setPage] = useState(0)
     const { drink, drinksList } = useSelector((state: RootState) => state.drinks)
     const dispatch: AppDispatch = useDispatch()
 
@@ -138,7 +139,7 @@ export default function Drinks() {
     }
 
     const randomDrink = (drink: Drink) => {
-        return <button key={drink.id} onClick={handleSelectedToggle} className="flex flex-col h-[90%] w-[90%] items-center shadow-2xl p-6 rounded-lg">
+        return <button key={drink.id} onClick={handleSelectedToggle} className="flex flex-col h-[90%] w-[90%] items-center shadow-xl p-6 rounded-lg">
                 <div className="font-bold text-3xl">{drink.name}</div>
                 <div className="text-xl font-light">{drink.tagline}</div>
                 {drink.image_url ? (<img src={drink.image_url} className="max-w-[7rem]"/>) : 
@@ -147,15 +148,43 @@ export default function Drinks() {
             </button>
     }
 
-    const searchedDrinks = drinksList.map((drink: Drink) => {
-        return <button key={drink.id} onClick={() => handleSearchSelectToggle(drink)} className="flex flex-col h-[90%] w-[90%] items-center shadow-2xl p-6 rounded-lg">
-            <div className="font-bold text-3xl">{drink.name}</div>
-            <div className="text-xl font-light">{drink.tagline}</div>
-            {drink.image_url ? (<img src={drink.image_url} className="max-w-[7rem]"/>) : 
-            (<img src="/pubcrawl.svg" className="max-w-[10rem]"/>)}
-            <p className="text-lg font-mono">abv: {drink.abv}% ibu: {drink.ibu}%</p>
-        </button>
-    })
+    const searchedDrinks = (drink: Drink) => {
+        return <button key={drink.id} onClick={() => handleSearchSelectToggle(drink)} className="flex flex-col h-[90%] w-[90%] items-center shadow-xl p-6 rounded-lg">
+                <div className="font-bold text-3xl">{drink.name}</div>
+                <div className="text-xl font-light">{drink.tagline}</div>
+                {drink.image_url ? (<img src={drink.image_url} className="max-w-[7rem]"/>) : 
+                (<img src="/pubcrawl.svg" className="max-w-[10rem]"/>)}
+                <p className="text-lg font-mono">abv: {drink.abv}% ibu: {drink.ibu}%</p>
+            </button>
+    }
+
+    const handleNext = () => {
+        let check = page + 1
+        if (check === drinksList.length) {
+            setPage(0)
+        } else {
+            setPage(page + 1)
+        }
+    }
+
+    const handlePrev = () => {
+        let check = page - 1
+        if (check < 0) {
+            setPage(drinksList.length - 1)
+        } else (
+            setPage(page - 1)
+        )
+    }
+
+    // const searchedDrinks = drinksList.map((drink: Drink) => {
+    //     return <button key={drink.id} onClick={() => handleSearchSelectToggle(drink)} className="flex flex-col h-[90%] w-[90%] items-center shadow-xl p-6 rounded-lg">
+    //         <div className="font-bold text-3xl">{drink.name}</div>
+    //         <div className="text-xl font-light">{drink.tagline}</div>
+    //         {drink.image_url ? (<img src={drink.image_url} className="max-w-[7rem]"/>) : 
+    //         (<img src="/pubcrawl.svg" className="max-w-[10rem]"/>)}
+    //         <p className="text-lg font-mono">abv: {drink.abv}% ibu: {drink.ibu}%</p>
+    //     </button>
+    // })
 
     return ( 
         <section id="drinks" className="pb-10 overflow-y-hidden">
@@ -171,7 +200,11 @@ export default function Drinks() {
             ) : (
                 <section className="flex flex-col gap-6 items-center mt-8" >
                     <h2 className="uppercase font-black text-6xl text-center mb-4">your lucky drinks</h2>
-                        {searchedDrinks}
+                        <div className="flex gap-2 justify-center mt-5 -mb-8">
+                            <button onClick={handlePrev}><img src="/left-arrow.svg" alt="<" className="max-w-[2rem]"/></button>
+                            <button onClick={handleNext}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem]"/></button>
+                        </div>
+                        {searchedDrinks(drinksList[page])}
                 </section>
             )}
         </section>
