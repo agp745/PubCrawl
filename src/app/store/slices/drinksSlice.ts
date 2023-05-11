@@ -9,7 +9,11 @@ export interface Drink {
     description: string,
     image_url: string,
     abv: number,
-    ibu: number;
+    ibu: number,
+    ph: number,
+    ebc: number,
+    srm: number,
+    attenuation_level: number,
     volume: {
         value: number,
         unit: string
@@ -18,18 +22,15 @@ export interface Drink {
     brewers_tips: string
 }
 interface DrinksState {
-    drink: Drink | undefined,
+    drink: Drink,
     drinksList: Drink[],
     isLoading: boolean
 }
 
-
-// const { data } = await axios(`https://api.punkapi.com/v2/beers?per_page=3`)
-
-export const fetchBeers = createAsyncThunk('drinks/fetchBeers', async () => {
+export const fetchRandomBeer = createAsyncThunk('drinks/fetchBeers', async () => {
     try {
-        const { data } = await axios(`https://api.punkapi.com/v2/beers?per_page=3`)
-        return data
+        const { data } = await axios(`https://api.punkapi.com/v2/beers/random`)
+        return data[0]
     } catch (e) {
 
     }
@@ -37,7 +38,26 @@ export const fetchBeers = createAsyncThunk('drinks/fetchBeers', async () => {
 
 
 const initialState: DrinksState = {
-    drink: undefined,
+    drink: {
+        abv: 0,
+        brewers_tips: '',
+        description: '',
+        first_brewed: '',
+        food_pairing: [''],
+        ibu: 0,
+        id: 0,
+        image_url: '',
+        name: '',
+        tagline: '',
+        ph: 0,
+        ebc: 0,
+        srm: 0,
+        attenuation_level: 0,
+        volume: {
+            unit: '',
+            value: 0
+        }
+    },
     drinksList: [],
     isLoading: false,
 }
@@ -46,36 +66,27 @@ const drinksSlice = createSlice({
     name: 'drinks',
     initialState,
     reducers: {
+        setDrinkList: (state, action: PayloadAction<Drink[]>) => {
+            state.drinksList = action.payload
+        },
         setDrink: (state, action: PayloadAction<Drink>) => {
             state.drink = action.payload
         }
     },
-    // extraReducers: {
-    //     [fetchBeers.pending]: (state: DrinksState) => {
-    //         state.isLoading = true
-    //     },
-    //     [fetchBeers.fulfilled]: (state: DrinksState, action: PayloadAction<Drink[]>) => {
-
-    //         state.isLoading = false
-    //     },
-    //     [fetchBeers.rejected]: (state: DrinksState) => {
-    //         state.isLoading = false
-    //     }
-    // }
     extraReducers(builder) {
-        builder.addCase(fetchBeers.pending, (state: DrinksState) => {
+        builder.addCase(fetchRandomBeer.pending, (state: DrinksState) => {
             state.isLoading = true
         }),
-        builder.addCase(fetchBeers.rejected, (state: DrinksState) => {
+        builder.addCase(fetchRandomBeer.rejected, (state: DrinksState) => {
             state.isLoading = false
         }),
-        builder.addCase(fetchBeers.fulfilled, (state: DrinksState, action: PayloadAction<Drink[]>) => {
+        builder.addCase(fetchRandomBeer.fulfilled, (state: DrinksState, action: PayloadAction<Drink>) => {
             state.isLoading = false
-            state.drinksList = action.payload
+            state.drink = action.payload
         })
     },
 })
 
-export const { setDrink } = drinksSlice.actions
+export const { setDrinkList, setDrink } = drinksSlice.actions
 
 export default drinksSlice.reducer

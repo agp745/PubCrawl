@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 import { Coordinates, getCoordinates } from "../app/location"
 import { setCity } from "../app/store/slices/locationSlice"
 import type { LocationInfo } from "../app/location"
 import type { RootState } from "../app/store/store"
 import axios from "axios"
-import Map from "./Map"
 
 export type CityCoordinates = {
     coordinates: Coordinates,
@@ -143,9 +143,6 @@ function SearchBar({ onCityCoordinates }:SearchBarProps) {
     )
 }
 
-
-
-
 export default function PubSearch() {
 
     const { currentCoords, isLoading, city } = useSelector((state: RootState) => state.location)
@@ -193,7 +190,7 @@ export default function PubSearch() {
         <section className="flex flex-col">
             <div id="top" className="flex p-3 justify-center">
                 {city === undefined ? 
-                (<h2 className="text-2xl">breweries in your area</h2>):
+                (<h2 className="text-2xl font-light">breweries in your area</h2>):
                 (<h2 className="text-2xl">breweries near <span className="font-bold text-4xl">{city}</span></h2>)}
                 <SearchBar onCityCoordinates={handleCityCoordinates}/>
             </div>
@@ -206,8 +203,11 @@ export default function PubSearch() {
                         <div className="font-bold text-2xl mx-6">{page}</div>
                         <button onClick={() => setPage(page + 1)}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem]"/></button>
                     </div>
+                <div>
+                    <p>Getting thirsty? Click <Link to={'/drinks'} className="text-green-600 font-semibold">HERE</Link> to discover your next favorite beer</p>
                 </div>
-            {/* <Map /> */}
+                </div>
+
             </section>
         </section>
     )

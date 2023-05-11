@@ -21,13 +21,13 @@ function Header() {
     )
 }
 
-function Footer() {
-    return (
-        <section className="fixed bottom-0 w-full text-center">
-            <p>©copyright 2023</p>
-        </section>
-    )
-}
+// function Footer() {
+//     return (
+//         <section className="fixed bottom-0 w-full text-center">
+//             <p>©copyright 2023</p>
+//         </section>
+//     )
+// }
 
 export default function BaseLayout(props: BaseProps) {
 
@@ -35,7 +35,7 @@ export default function BaseLayout(props: BaseProps) {
         <section>
             <Header />
             {props.children}
-            <Footer />
+            {/* <Footer /> */}
         </section>
     )
 }
