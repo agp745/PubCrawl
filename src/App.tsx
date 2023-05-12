@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux"
 import { supabase } from "./app/supabaseClient"
 import { login } from "./app/store/slices/authSlice"
 import Home from "./components/Home"
-import './css/App.css'
 
 function App() {
 

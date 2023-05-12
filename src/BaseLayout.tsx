@@ -28,19 +28,22 @@ function Header() {
     }
 
     return(
-        <section className="flex gap-2 bg-red-300 px-9" >
-            <div>
-                <h1><Link to={'/'}>PubCrawl</Link></h1>
-            </div>
-        
-            {isAuthorized ? (
+        <>
+            <section className="flex justify-end bg-neutral-400 px-9 py-2 shadow-2xl" >
                 <div>
-                    <button onClick={handleSignout}>Signout</button>
-                    <Link to="/profile">Profile</Link>
-                </div>) : (<Link to="/login">Login</Link>)
-            }
+                    <h1><Link to={'/'}><img src="/pubcrawl.svg" className="fixed top-0.5 left-1 w-[2.5rem]"/></Link></h1>
+                </div>
             
-        </section>
+                {isAuthorized ? (
+                    <div className="flex gap-7 text-lg font-semibold">
+                        <button onClick={handleSignout} className="active:scale-95">Signout</button>
+                        <div>|</div>
+                        <Link to="/profile" className="active:scale-95">Profile</Link>
+                    </div>) : (<Link to="/login" className="text-lg font-semibold active:scale-95">Login</Link>)
+                }
+                
+            </section>
+        </>
     )
 }
 

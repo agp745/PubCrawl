@@ -100,23 +100,21 @@ export function DrinkInfo({onSelectedToggle, drinkInfo}: DrinkModuleProps) {
     const foodPairings = selectedDrink?.food_pairing.map((food, idx) => <div key={idx}>{food}</div>)
 
     const drinkInfoDisplay = (drink?: Drink) => {
-        return <div className="flex flex-col items-center gap-5">
-            <h1 className="text-5xl font-bold ">{drink?.name}</h1>
-            <h2 className="text-xl font-light">{drink?.tagline}</h2>
-
-            <section id="split" className="flex mx-1">
-                <section id="left" className="basis-1/2">
-                    <div className="text-lg text-left font-medium text-blue-950 ml-3 pl-10">{drink?.description}</div>
-                </section>
-                <section id="right" className="basis-1/2">
-                    <div id="container" className="flex justify-center items-center">
-                        {drink?.image_url ? (<img src={drink?.image_url} className="max-w-[7rem]"/>) : 
-                        (<img src="/pubcrawl.svg" className="max-w-[7rem]"/>)}
-                    </div>
-                </section>
-            </section>
-
+        return <div className="flex flex-col items-center gap-5 mt-10">
             <section id="table" className="flex flex-col gap-5 bg-white rounded-lg w-[90%] p-5 font-mono bg-opacity-50">
+                <section id="split" className="flex mx-1">
+                    <section id="left" className="basis-1/2">
+                        <h1 className="text-5xl font-bold ">{drink?.name}</h1>
+                        <h2 className="text-xl font-light">{drink?.tagline}</h2>
+                        <div className="text-xl text-left font-medium text-blue-950 ml-3 mt-10 pl-10">{drink?.description}</div>
+                    </section>
+                    <section id="right" className="basis-1/2">
+                        <div id="container" className="flex justify-center items-center">
+                            {drink?.image_url ? (<img src={drink?.image_url} className="max-w-[7rem]"/>) : 
+                            (<img src="/pubcrawl.svg" className="max-w-[7rem]"/>)}
+                        </div>
+                    </section>
+                </section>
                 <div id="row" className="flex justify-between shadow-sm">
                     <div>abv</div>
                     <div className="font-semibold">{drink?.abv}%</div>
