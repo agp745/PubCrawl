@@ -2,40 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* #pubCard {
-  background-image: url(/sks-ocean.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  z-index: -5;
-  padding-bottom: 1rem;
-  text-align: center;
-  font-size: 1.5rem;
-  border-radius: 2%;
-  box-shadow: 10px 10px 5px rgb(20, 20, 20);
-  overflow: hidden;
-  transition: 0.2s ease-in-out;
-} */
-
-/* #pubCard::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: -1;
-  background-image: url(/sks-ocean.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-} */
 
 
 
-/* body {
-  background-color: hsl(23, 80%, 90%);
-} */
+body {
+  overflow-x: hidden;
+}
 
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
