@@ -12,7 +12,12 @@ export default function Login() {
         event.preventDefault()
 
         setLoading(true)
-        const { error } = await supabase.auth.signInWithOtp({ email })
+        const { error } = await supabase.auth.signInWithOtp({ 
+            email: email,
+            options: {
+                emailRedirectTo: 'https://pubcrawl.vercel.app/'
+            }
+        })
 
         if (error) {
             alert(error.message)
