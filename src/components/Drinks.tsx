@@ -14,12 +14,22 @@ type DrinkModuleProps = {
 function Search() {
 
     const [search, setSearch] = useState('')
+    const [err, setErr] = useState('')
     const dispatch = useDispatch()
 
     const handleSearch = async (beer: string) => {
         const beerName = beer.replace(' ', '_')
-        const { data } = await axios(`https://api.punkapi.com/v2/beers?beer_name=${beerName}`)
-        dispatch(setDrinkList(data))
+        try {
+            const { data } = await axios(`https://api.punkapi.com/v2/beers?beer_name=${beerName}`)
+            if(data.length === 0) {
+                setErr('no matches found')
+            } else {
+                setErr('')
+                dispatch(setDrinkList(data))
+            }
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,12 +37,15 @@ function Search() {
         setSearch(value)
     }
 
-    return <section className="flex justify-center mt-3">
-                <input type="text" value={search} placeholder="search beers..." onChange={handleInput} className="p-1 rounded-md border-neutral-900 border-2"/>
-                <button onClick={() => handleSearch(search)}>
-                    <img src="/search-icon.svg" className="max-w-[2rem] ml-1"/>
-                </button>
-        </section>
+    return <section className="flex flex-col items-center mt-3">
+        <div className="flex justify-center">
+            <input type="text" value={search} placeholder="search beers..." onChange={handleInput} className="p-1 rounded-md border-neutral-900 border-2"/>
+            <button onClick={() => handleSearch(search)}>
+                <img src="/search-icon.svg" className="max-w-[2rem] ml-1 active:scale-95"/>
+            </button>
+        </div>
+        <div className="font-light italic text-red-800">{err}</div>
+    </section>
 }
 
 
@@ -111,8 +124,8 @@ function DrinkInfo({onSelectedToggle, drinkInfo}: DrinkModuleProps) {
     <section className="fixed top-0 left-0 bottom-0 right-0 bg-gray-500 bg-opacity-60 backdrop-blur w-full h-full pb-10 text-center overflow-y-auto">
         {drinkInfoDisplay(selectedDrink)}
         <div id="buttons" className="flex gap-2 mt-2 justify-center">
-        <button className="bg-green-200 border-green-500 text-green-950 font-medium border-2 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" >save</button>
-        <button onClick={onSelectedToggle} className="bg-red-200 border-red-500 text-red-950 font-medium border-2 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" >close</button>
+        <button className="bg-green-200 hover:bg-green-300 border-green-500 text-green-950 font-medium border-2 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] active:scale-95" >save</button>
+        <button onClick={onSelectedToggle} className="bg-red-200 hover:bg-red-400 border-red-500 text-red-950 font-medium border-2 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] active:scale-95" >close</button>
         </div>
     </section>
     )
@@ -176,16 +189,6 @@ export default function Drinks() {
         )
     }
 
-    // const searchedDrinks = drinksList.map((drink: Drink) => {
-    //     return <button key={drink.id} onClick={() => handleSearchSelectToggle(drink)} className="flex flex-col h-[90%] w-[90%] items-center shadow-xl p-6 rounded-lg">
-    //         <div className="font-bold text-3xl">{drink.name}</div>
-    //         <div className="text-xl font-light">{drink.tagline}</div>
-    //         {drink.image_url ? (<img src={drink.image_url} className="max-w-[7rem]"/>) : 
-    //         (<img src="/pubcrawl.svg" className="max-w-[10rem]"/>)}
-    //         <p className="text-lg font-mono">abv: {drink.abv}% ibu: {drink.ibu}%</p>
-    //     </button>
-    // })
-
     return ( 
         <section id="drinks" className="pb-10 overflow-y-hidden">
             {isSelected ? (<DrinkInfo onSelectedToggle={handleSelectedToggle} drinkInfo={drink}/>) : (<Search />)}
@@ -201,8 +204,8 @@ export default function Drinks() {
                 <section className="flex flex-col gap-6 items-center mt-8" >
                     <h2 className="uppercase font-black text-6xl text-center mb-4">your lucky drinks</h2>
                         <div className="flex gap-2 justify-center mt-5 -mb-8">
-                            <button onClick={handlePrev}><img src="/left-arrow.svg" alt="<" className="max-w-[2rem]"/></button>
-                            <button onClick={handleNext}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem]"/></button>
+                            <button onClick={handlePrev}><img src="/left-arrow.svg" alt="<" className="max-w-[2rem] active:scale-95"/></button>
+                            <button onClick={handleNext}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem] active:scale-95"/></button>
                         </div>
                         {searchedDrinks(drinksList[page])}
                 </section>

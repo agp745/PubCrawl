@@ -5,12 +5,14 @@ import type { CityCoordinates } from "../../../components/PubSearch";
 
 export interface LocationState {
     isLoading: boolean,
+    coordinatesObtained: boolean,
     currentCoords: Coordinates,
     city: string | undefined,
 }
 
 const initialState: LocationState = {
     isLoading: true,
+    coordinatesObtained: false,
     currentCoords: {
         latitude: 0,
         longitude: 0
@@ -28,10 +30,12 @@ const locationSlice = createSlice({
     reducers: {
         setCoords: (state, action: PayloadAction<Coordinates>) => {
             state.isLoading = false
+            state.coordinatesObtained = true
             state.currentCoords = action.payload
         },
         errCoords: (state) => {
             state.isLoading = false
+            state.coordinatesObtained = false
         },
         setCity: (state, action: PayloadAction<CityCoordinates>) => {
             state.isLoading = true

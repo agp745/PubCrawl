@@ -19,7 +19,7 @@ type SearchBarProps = {
 function StatesOptions() {
 
     return <>
-        <option value=""><span className="italic text-xs">(US ONLY)</span></option>
+        <option value="">state (US ONLY)</option>
         <option value="Alabama">Alabama</option>
         <option value="Alaska">Alaska</option>
         <option value="Arizona">Arizona</option>
@@ -123,21 +123,19 @@ function SearchBar({ onCityCoordinates }:SearchBarProps) {
     return (
         <>
             {search.isSearching ? (
-                <section id="searchbar" className="fixed bg-gray-500 bg-opacity-40 backdrop-blur-sm w-full h-full">
-                    <label htmlFor="state">City </label>
-                    <input type="text" placeholder="city" name="city" value={search.city} onChange={handleInput}/>
-                    <br />
-                    <label htmlFor="state">State </label>
-                    <select name="state" onChange={handleInput}>
-                        <StatesOptions />
-                    </select>
-                    <br />
-                    <label htmlFor="state">Country </label>
-                    <input type="text" placeholder="country (optional)" name="country" value={search.country} onChange={handleInput}/>
-                    <button onClick={fetchCityCoords}>Search</button>
+                <section id="searchbar" className="fixed top-0 bottom-0 left-0 right-0 text-center bg-gray-500 bg-opacity-40 backdrop-blur-sm w-full h-full">
+                    <div id="wrapper" className="flex flex-col gap-5 items-center mt-48">
+                        <img src="/pubcrawl.svg" className="max-w-[10rem]"/>
+                        <input type="text" placeholder="city" name="city" value={search.city} onChange={handleInput} className="px-2 py-0.5 rounded-md"/>
+                        <select name="state" onChange={handleInput} className="px-2 py-0.5 rounded-md">
+                            <StatesOptions />
+                        </select>
+                        <input type="text" placeholder="country (optional)" name="country" value={search.country} onChange={handleInput} className="px-2 py-0.5 rounded-md"/>
+                        <button onClick={fetchCityCoords}><img src="/search-icon.svg" className="max-w-[3rem] active:scale-95"/></button>
+                    </div>
                 </section>
             ) : (
-                <button onClick={toggleSearch}><img src="/search-icon.svg" className="max-w-[2rem] ml-3"/></button>
+                <button onClick={toggleSearch}><img src="/search-icon.svg" className="max-w-[2rem] ml-3 active:scale-95"/></button>
                 )}
         </>
     )
@@ -145,14 +143,19 @@ function SearchBar({ onCityCoordinates }:SearchBarProps) {
 
 export default function PubSearch() {
 
-    const { currentCoords, isLoading, city } = useSelector((state: RootState) => state.location)
+    const { currentCoords, isLoading, city, coordinatesObtained } = useSelector((state: RootState) => state.location)
     const dispatch = useDispatch()
 
     const [breweries, setBreweries] = useState([])
     const [page, setPage] = useState(1)
 
     useEffect(() => {
-        getCoordinates(dispatch)
+        if(!coordinatesObtained) {
+            getCoordinates(dispatch)
+        }
+    }, [])
+
+    useEffect(() => {
         if(!isLoading) {
             fetchPubs(currentCoords.latitude, currentCoords.longitude, page)
         }
@@ -169,7 +172,7 @@ export default function PubSearch() {
     }
 
     const nearbyBreweries = breweries.map((pub: LocationInfo) => {
-        return <div key={pub.id} className="bg-white rounded-xl p-5 shadow-xl">
+        return <div key={pub.id} id="pubCard" className="bg-white  rounded-xl p-5 shadow-xl hover:scale-105 transition duration-300 ease-in-out">
             <a href={pub.website_url} target="_blank">
                 <h2 className="font-bold">{pub.name}</h2>
                 <p>{pub.street}</p>
@@ -197,14 +200,14 @@ export default function PubSearch() {
             
             <section className="flex justify-center gap-10">
                 <div className="flex flex-col mr-4">
-                    {isLoading ? <div>Loading...</div> : <div className="flex flex-col gap-5">{nearbyBreweries}</div>}
+                    {isLoading ? (<><img src="/beer-cheers-gif.webp" /><div>Loading...</div></>) : <div className="flex flex-col gap-5">{nearbyBreweries}</div>}
                     <div className="flex gap-2 justify-center mt-5 pb-7">
-                        {page === 1 ? (<div className="invisible"><img src="/left-arrow.svg" alt="<" className="max-w-[2rem]"/></div>) : (<button onClick={prevPage}><img src="/left-arrow.svg" alt="<" className="max-w-[2rem]"/></button>) }
+                        {page === 1 ? (<div className="invisible"><img src="/left-arrow.svg" alt="<" className="max-w-[2rem]"/></div>) : (<button onClick={prevPage}><img src="/left-arrow.svg" alt="<" className="max-w-[2rem] active:scale-95"/></button>) }
                         <div className="font-bold text-2xl mx-6">{page}</div>
-                        <button onClick={() => setPage(page + 1)}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem]"/></button>
+                        <button onClick={() => setPage(page + 1)}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem] active:scale-95"/></button>
                     </div>
                 <div>
-                    <p>Getting thirsty? Click <Link to={'/drinks'} className="text-green-600 font-semibold">HERE</Link> to discover your next favorite beer</p>
+                    <p>Getting thirsty? Click <Link to={'/drinks'} className="text-green-600 font-semibold hover:underline">HERE</Link> to discover your next favorite beer</p>
                 </div>
                 </div>
 

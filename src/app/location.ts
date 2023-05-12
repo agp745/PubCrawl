@@ -1,4 +1,5 @@
 import { setCoords, errCoords } from "../app/store/slices/locationSlice"
+import { useSelector } from "react-redux"
 import type { AppDispatch } from "../app/store/store"
 
 export type Coordinates = {
