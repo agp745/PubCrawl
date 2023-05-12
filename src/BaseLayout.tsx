@@ -39,7 +39,7 @@ function Header() {
                         <button onClick={handleSignout} className="active:scale-95">Signout</button>
                         <div>|</div>
                         <Link to="/profile" className="active:scale-95">Profile</Link>
-                    </div>) : (<Link to="/login" className="text-lg font-semibold active:scale-95">Login</Link>)
+                    </div>) : (<Link to="/login" className="flex text-lg font-semibold active:scale-95">Login</Link>)
                 }
                 
             </section>
