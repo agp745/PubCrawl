@@ -21,11 +21,9 @@ export default function Login() {
     }
 
     return(
-        <section className="row flex flex-center">
-            <div className="col-6 form-widget">
-                <h1 className="header">Supabase + react</h1>
-                <p className="description">Sign in via magic link with your email below</p>
-                <form className="form-widget" onSubmit={handleLogin}>
+        <section className="flex flex-col items-center mt-80">
+                <p className="text-5xl font-thin">passwordless sign in</p>
+                <form className="mt-8" onSubmit={handleLogin}>
                     <div>
                         <input
                             type="email"
@@ -33,16 +31,15 @@ export default function Login() {
                             value={email}
                             required={true}
                             onChange={e => setEmail(e.target.value)}
-                            className="inputfield"
+                            className="px-3 py-1 rounded-md"
                         />
                     </div>
-                    <div>
-                        <button className='{button block}' disabled={loading}>
-                            {loading ? <span>Loading</span> : <span>Send magic link</span>}
+                    <div className="flex justify-center">
+                        <button className='bg-green-200 hover:bg-green-300 border-green-500 text-green-950 text-lg font-medium border-2 mt-3 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] active:scale-95' disabled={loading}>
+                            {loading ? <span>Loading</span> : <span>send verification</span>}
                         </button>
                     </div>
                 </form>
-            </div>
         </section>
 
     )
