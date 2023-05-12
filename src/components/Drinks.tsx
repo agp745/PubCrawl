@@ -106,7 +106,7 @@ export function DrinkInfo({onSelectedToggle, drinkInfo}: DrinkModuleProps) {
                     <section id="left" className="basis-1/2">
                         <h1 className="text-5xl font-bold ">{drink?.name}</h1>
                         <h2 className="text-xl font-light">{drink?.tagline}</h2>
-                        <div className="text-xl text-left font-medium text-blue-950 ml-3 mt-10 pl-10">{drink?.description}</div>
+                        <div className="text-sm md:text-xl text-left font-medium text-blue-950 md:ml-3 mt-10 pl-10">{drink?.description}</div>
                     </section>
                     <section id="right" className="basis-1/2">
                         <div id="container" className="flex justify-center items-center">
@@ -192,7 +192,7 @@ export default function Drinks() {
     }
 
     const randomDrink = (drink: Drink) => {
-        return <button key={drink.id} onClick={handleSelectedToggle} className="flex flex-col h-[90%] w-[90%] items-center shadow-xl p-6 rounded-lg">
+        return <button key={drink.id} onClick={handleSelectedToggle} className="flex flex-col h-[80%] md:h-[90%] w-[90%] items-center shadow-xl px-6 pt-6 rounded-lg -mt-6">
                 <div className="font-bold text-3xl">{drink.name}</div>
                 <div className="text-xl font-light">{drink.tagline}</div>
                 {drink.image_url ? (<img src={drink.image_url} className="max-w-[7rem]"/>) : 
@@ -202,7 +202,7 @@ export default function Drinks() {
     }
 
     const searchedDrinks = (drink: Drink) => {
-        return <button key={drink.id} onClick={() => handleSearchSelectToggle(drink)} className="flex flex-col h-[90%] w-[90%] items-center shadow-xl p-6 rounded-lg">
+        return <button key={drink.id} onClick={() => handleSearchSelectToggle(drink)} className="flex flex-col h-[80%] md:h-[90%] w-[90%] items-center shadow-xl p-6 rounded-lg -mt-9">
                 <div className="font-bold text-3xl">{drink.name}</div>
                 <div className="text-xl font-light">{drink.tagline}</div>
                 {drink.image_url ? (<img src={drink.image_url} className="max-w-[7rem]"/>) : 
@@ -242,8 +242,8 @@ export default function Drinks() {
                 </section>
             ) : (
                 <section className="flex flex-col gap-6 items-center mt-8" >
-                    <h2 className="uppercase font-black text-6xl text-center mb-4">your lucky drinks</h2>
-                        <div className="flex gap-2 justify-center mt-5 -mb-8">
+                    <h2 className="uppercase font-black text-5xl md:text-6xl text-center -mb-4">your searched drinks</h2>
+                        <div className="flex gap-2 justify-center mt-5">
                             <button onClick={handlePrev}><img src="/left-arrow.svg" alt="<" className="max-w-[2rem] active:scale-95"/></button>
                             <button onClick={handleNext}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem] active:scale-95"/></button>
                         </div>

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { supabase } from "../app/supabaseClient";
-// import '../css/Login.css'
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const navigate = useNavigate()
+
     const [loading, setLoading] = useState<boolean>(false)
     const [email, setEmail] = useState<string>('')
 
@@ -15,7 +17,7 @@ export default function Login() {
         if (error) {
             alert(error.message)
         } else {
-            alert('Check your email for the login link!')
+            navigate('/email-confirmation')
         }
         setLoading(false)
     }

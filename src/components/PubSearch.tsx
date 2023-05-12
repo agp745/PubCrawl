@@ -172,7 +172,7 @@ export default function PubSearch() {
     }
 
     const nearbyBreweries = breweries.map((pub: LocationInfo) => {
-        return <div key={pub.id} id="pubCard" className="bg-white  rounded-xl p-5 shadow-xl hover:scale-105 transition duration-300 ease-in-out">
+        return <div key={pub.id} id="pubCard" className="bg-white w-[90%] rounded-xl p-5 shadow-xl hover:scale-105 transition duration-300 ease-in-out">
             <a href={pub.website_url} target="_blank">
                 <h2 className="font-bold">{pub.name}</h2>
                 <p>{pub.street}</p>
@@ -198,16 +198,16 @@ export default function PubSearch() {
                 <SearchBar onCityCoordinates={handleCityCoordinates}/>
             </div>
             
-            <section className="flex justify-center gap-10">
-                <div className="flex flex-col mr-4">
-                    {isLoading ? (<><img src="/beer-cheers-gif.webp" /><div>Loading...</div></>) : <div className="flex flex-col gap-5">{nearbyBreweries}</div>}
+            <section className="flex justify-center gap-10 ">
+                <div className="flex flex-col">
+                    {isLoading ? (<><img src="/beer-cheers-gif.webp" /><div>Loading...</div></>) : <div className="flex flex-col gap-5 items-center">{nearbyBreweries}</div>}
                     <div className="flex gap-2 justify-center mt-5 pb-7">
                         {page === 1 ? (<div className="invisible"><img src="/left-arrow.svg" alt="<" className="max-w-[2rem]"/></div>) : (<button onClick={prevPage}><img src="/left-arrow.svg" alt="<" className="max-w-[2rem] active:scale-95"/></button>) }
                         <div className="font-bold text-2xl mx-6">{page}</div>
                         <button onClick={() => setPage(page + 1)}><img src="/right-arrow.svg" alt=">" className="max-w-[2rem] active:scale-95"/></button>
                     </div>
                 <div>
-                    <p>Getting thirsty? Click <Link to={'/drinks'} className="text-green-600 font-semibold hover:underline">HERE</Link> to discover your next favorite beer</p>
+                    <p className="text-center p-4 -mt-5">Getting thirsty? Click <Link to={'/drinks'} className="text-green-600 font-semibold hover:underline">HERE</Link> to discover your next favorite beer</p>
                 </div>
                 </div>
 

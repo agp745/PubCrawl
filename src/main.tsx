@@ -12,6 +12,7 @@ import BaseLayout from './BaseLayout.tsx'
 import Login from './components/Login.tsx'
 import Profile from './components/Profile.tsx'
 import type { Session } from '@supabase/supabase-js'
+import EmailConfirmation from './components/EmailConfirmation.tsx'
 
 function Main() {
   const [session, setSession] = useState<Session | null>(null)
@@ -39,6 +40,7 @@ function Main() {
               <Route path='/drinks' element={<Drinks />} />
               <Route path='/login' element={<Login />} />
               <Route path='/profile' element={<Profile key={session?.user.id} session={session}/>} />
+              <Route path='/email-confirmation' element={<EmailConfirmation />} />
             </Routes>
           </BaseLayout>
         </Provider>
