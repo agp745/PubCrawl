@@ -5,11 +5,16 @@ import { setDrinkList, setDrink } from "../app/store/slices/drinksSlice"
 import axios from "axios"
 import type { Drink } from "../app/store/slices/drinksSlice"
 import { AppDispatch, RootState } from "../app/store/store"
+import { supabase } from "../app/supabaseClient"
 
 type DrinkModuleProps = {
     onSelectedToggle: () => void
     drinkInfo: Drink
 }
+
+// interface Profile {
+//     drinks: any[]
+// }
 
 function Search() {
 
@@ -49,34 +54,67 @@ function Search() {
 }
 
 
-function DrinkInfo({onSelectedToggle, drinkInfo}: DrinkModuleProps) {
+export function DrinkInfo({onSelectedToggle, drinkInfo}: DrinkModuleProps) {
 
     const [selectedDrink, setSelectedDrink] = useState<Drink | undefined>(undefined)
+    const { isAuthorized } = useSelector((state: RootState) => state.auth)
 
     useEffect(() => {
         setSelectedDrink(drinkInfo)
     }, [])
 
-    const foodPairings = selectedDrink?.food_pairing.map((food) => <div>{food}</div>)
+    const handleSave = async (drink?: Drink) => {
+        const id = localStorage.getItem('id')
+    
+        const { error, data } = await supabase
+            .from('profiles')
+            .select('drinks')
+            .eq('id', id)
+            .maybeSingle()
+    
+        if (error) {
+            console.error(error)
+            alert(error.message)
+        }
+
+        if(!data) {
+            console.error('Data is null')
+        }
+
+        console.log(data)
+        const drinks = data?.drinks ?? [];
+    
+        const { error:  updateError } = await supabase
+            .from('profiles')
+            .update({drinks: [...drinks, drink]})
+            .eq('id', id)
+    
+        if (updateError) {
+            console.log(updateError)
+            alert(updateError.message)
+        } else {
+            alert('beer saved')
+        }
+    }
+
+    const foodPairings = selectedDrink?.food_pairing.map((food, idx) => <div key={idx}>{food}</div>)
 
     const drinkInfoDisplay = (drink?: Drink) => {
-        return <div className="flex flex-col items-center gap-5">
-            <h1 className="text-5xl font-bold ">{drink?.name}</h1>
-            <h2 className="text-xl font-light">{drink?.tagline}</h2>
-
-            <section id="split" className="flex mx-1">
-                <section id="left" className="basis-1/2">
-                    <div className="text-lg text-left font-medium text-blue-950 ml-3 pl-10">{drink?.description}</div>
-                </section>
-                <section id="right" className="basis-1/2">
-                    <div id="container" className="flex justify-center items-center">
-                        {drink?.image_url ? (<img src={drink?.image_url} className="max-w-[7rem]"/>) : 
-                        (<img src="/pubcrawl.svg" className="max-w-[7rem]"/>)}
-                    </div>
-                </section>
-            </section>
-
+        return <div className="flex flex-col items-center gap-5 mt-10">
             <section id="table" className="flex flex-col gap-5 bg-white rounded-lg w-[90%] p-5 font-mono bg-opacity-50">
+                <section id="split" className="flex mx-1">
+                    <section id="left" className="basis-1/2">
+                        <h1 className="text-5xl font-bold ">{drink?.name}</h1>
+                        <h2 className="text-xl font-light">{drink?.tagline}</h2>
+                        <div className="text-xl text-left font-medium text-blue-950 ml-3 mt-10 pl-10">{drink?.description}</div>
+                    </section>
+                    <section id="right" className="basis-1/2">
+                        <div id="container" className="flex justify-center items-center">
+                            {drink?.image_url ? (<img src={drink?.image_url} className="max-w-[7rem]"/>) : 
+                            (<img src="/pubcrawl.svg" className="max-w-[7rem]"/>)}
+                        </div>
+                    </section>
+                </section>
                 <div id="row" className="flex justify-between shadow-sm">
                     <div>abv</div>
                     <div className="font-semibold">{drink?.abv}%</div>
@@ -124,7 +162,9 @@ function DrinkInfo({onSelectedToggle, drinkInfo}: DrinkModuleProps) {
     <section className="fixed top-0 left-0 bottom-0 right-0 bg-gray-500 bg-opacity-60 backdrop-blur w-full h-full pb-10 text-center overflow-y-auto">
         {drinkInfoDisplay(selectedDrink)}
         <div id="buttons" className="flex gap-2 mt-2 justify-center">
-        <button className="bg-green-200 hover:bg-green-300 border-green-500 text-green-950 font-medium border-2 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] active:scale-95" >save</button>
+        {isAuthorized ? (<button onClick={() => handleSave(selectedDrink)} className="bg-green-200 hover:bg-green-300 border-green-500 text-green-950 font-medium border-2 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] active:scale-95" >save</button>) :
+        (<div className="hidden"></div>)}
+        
         <button onClick={onSelectedToggle} className="bg-red-200 hover:bg-red-400 border-red-500 text-red-950 font-medium border-2 px-3 rounded-md drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] active:scale-95" >close</button>
         </div>
     </section>
