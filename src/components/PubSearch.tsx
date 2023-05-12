@@ -87,7 +87,7 @@ function SearchBar({ onCityCoordinates }:SearchBarProps) {
         toggleSearch()
         const { data } = await axios(`https://api.api-ninjas.com/v1/geocoding?city=${search.city}`, {
             headers: {
-                'X-Api-Key': import.meta.env.VITE_GEOCODE_API_KEY
+                'X-Api-Key': "MKBF3O0A4/YOuH7L7jihUA==AuHEqEp5z8Q33YuM"
             }
         })
         if (data.length > 0) {
